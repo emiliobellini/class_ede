@@ -289,7 +289,7 @@ int input_init(
   enum computation_stage target_cs[] = {cs_background, cs_background, cs_thermodynamics, cs_background,
                                         cs_background, cs_background, cs_background, cs_background, cs_nonlinear};
 /* END EDE-edit */
-    
+
   int input_verbose = 0, int1, aux_flag, shooting_failed=_FALSE_;
 
   class_read_int("input_verbose",input_verbose);
@@ -1188,18 +1188,18 @@ int input_read_parameters(
                                            &flag1,
                                            errmsg),
                errmsg,errmsg);
-      
+
       // EDE-edit: making Cobaya happy. EM: change f,m --> logf, logm
-      
+
     class_call(parser_read_double(pfc,"n_scf",&param2,&flag2,errmsg),errmsg,errmsg);
     class_call(parser_read_double(pfc,"CC_scf",&param5,&flag5,errmsg),errmsg,errmsg);
     class_call(parser_read_double(pfc,"thetai_scf",&param6,&flag6,errmsg),errmsg,errmsg);
-      
+
       /* EDE-edit: params except f and m */
     pba->scf_parameters[0] = param2;
     pba->scf_parameters[3] = param5;
     pba->scf_parameters[4] = param6;
-      
+
      /* f or logf*/
     class_call(parser_read_double(pfc,"log10f_scf",&param31,&flag31,errmsg),errmsg,errmsg);
     class_call(parser_read_double(pfc,"f_scf",&param32,&flag32,errmsg),errmsg,errmsg);
@@ -1225,15 +1225,15 @@ int input_read_parameters(
     if (flag42 == _TRUE_) {
      pba->scf_parameters[2] = param42;
     }
-      
 
-      
 
-    
 
-      
-      
-      
+
+
+
+
+
+
     class_read_int("scf_tuning_index",pba->scf_tuning_index);
     class_test(pba->scf_tuning_index >= pba->scf_parameters_size,
                errmsg,
@@ -3037,7 +3037,7 @@ int input_default_params(
   //MZ: initial conditions are as multiplicative factors of the radiation attractor values
   pba->phi_ini_scf = 1;
   pba->phi_prime_ini_scf = 1;
-    
+
   // EDE-edit: Added scf parameters by hand to make Cobaya happy
   pba->n_scf = 3;
   pba->f_scf = 3.973e26;
@@ -3045,12 +3045,12 @@ int input_default_params(
   pba->CC_scf = 1;
   pba->thetai_scf = 2.64;
     /* EDE-edit: default values for fEDE, z_c */
-  
+
   pba->fEDE= 0.1;
   pba->z_c= 3600;
   pba->log10z_c=3.5;
-   
-   
+
+
 
 
   pba->Omega0_k = 0.;
@@ -3578,10 +3578,26 @@ int input_try_unknown_parameters(double * unknown_parameter,
     if (input_verbose>2)
       printf("Stage 1: background\n");
     ba.background_verbose = 0;
+    // printf("before: %e, %e, %e, %e, %e, %e\n", ba.scf_parameters[0], ba.scf_parameters[1], ba.scf_parameters[2], ba.scf_parameters[3], ba.scf_parameters[4], ba.scf_parameters[5]);//EB
+    // printf("size = %d\n", ba.scf_parameters_size);//EB
+    // printf("idx = %d\n", ba.scf_tuning_index);//EB
+    // printf("before[0] = %e\n", ba.scf_parameters[0]);//EB
+    // printf("before[1] = %e\n", ba.scf_parameters[1]);//EB
+    // printf("before[2] = %e\n", ba.scf_parameters[2]);//EB
+    // printf("before[3] = %e\n", ba.scf_parameters[3]);//EB
+    // printf("before[4] = %e\n", ba.scf_parameters[4]);//EB
+    // printf("before[5] = %e\n", ba.scf_parameters[5]);//EB
     class_call(background_init(&pr,&ba),
                ba.error_message,
                errmsg
                );
+     // printf("after: %e, %e, %e, %e, %e, %e\n", ba.scf_parameters[0], ba.scf_parameters[1], ba.scf_parameters[2], ba.scf_parameters[3], ba.scf_parameters[4], ba.scf_parameters[5]);//EB
+     // printf("after[0] = %e\n", ba.scf_parameters[0]);//EB
+     // printf("after[1] = %e\n", ba.scf_parameters[1]);//EB
+     // printf("after[2] = %e\n", ba.scf_parameters[2]);//EB
+     // printf("after[3] = %e\n", ba.scf_parameters[3]);//EB
+     // printf("after[4] = %e\n", ba.scf_parameters[4]);//EB
+     // printf("after[5] = %e\n", ba.scf_parameters[5]);//EB
   }
 
   if (pfzw->required_computation_stage >= cs_thermodynamics){
@@ -3906,28 +3922,28 @@ int input_get_guess(double *xguess,
       xguess[index_guess] = 2.43e-9/0.87659*pfzw->target_value[index_guess];
       dxdy[index_guess] = 2.43e-9/0.87659;
       break;
-            
-    /* EDE-edit: added fEDE and z_c. Below "guess" is log_fscf[fEDE] and log10m[z_c]. 
+
+    /* EDE-edit: added fEDE and z_c. Below "guess" is log_fscf[fEDE] and log10m[z_c].
 	Guess functions based on Smith et al. 1908.06995, Appendix A. */
     case tn_fEDE:
       thetaitemp=ba.scf_parameters[ba.scf_parameters_size-2];
       n_scftemp=ba.scf_parameters[0];
       fcnA2=4*.2*thetaitemp*pow(1-cos(thetaitemp),-1.*n_scftemp)*(1/(3*n_scftemp))*(5*pow(1-cos(0.8*thetaitemp),n_scftemp)*tan(thetaitemp*.5) + 2*0.2*n_scftemp*thetaitemp*pow(1-cos(thetaitemp),n_scftemp));
       fcnA4=3*.2*thetaitemp*pow(1-cos(thetaitemp),-1.*n_scftemp)*(1/(2*n_scftemp))*(3*pow(1-cos(0.8*thetaitemp),n_scftemp)*tan(thetaitemp*.5) + 0.2*n_scftemp*thetaitemp*pow(1-cos(thetaitemp),n_scftemp));
-            
+
       if (pow(10.,pfzw->target_value[index_guess+1]) > 3500){
             xguess[index_guess] = log10(2.435e27*pow(pfzw->target_value[index_guess],.5)*pow(fcnA2,-0.5));
            dxdy[index_guess] = 0.217147*(1/pfzw->target_value[index_guess]);
-         
+
           }
-          
+
       if (pow(10.,pfzw->target_value[index_guess+1]) <= 3500){
            xguess[index_guess] = log10(2.435e27*pow(fcnA4,-0.5)*pow(pfzw->target_value[index_guess],0.5));
           dxdy[index_guess] = 0.217147*(1/pfzw->target_value[index_guess]);
             }
-        
+
       break;
-        
+
     case tn_z_c:
       thetaitemp=ba.scf_parameters[ba.scf_parameters_size-2];
       n_scftemp=ba.scf_parameters[0];
