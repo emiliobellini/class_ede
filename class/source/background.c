@@ -349,17 +349,10 @@ int background_functions(
     pvecback[pba->index_bg_V_e_scf] = V_e_scf(pba,phi);
 //
     pvecback[pba->index_bg_V_scf] = V_scf(pba,phi); //V_scf(pba,phi); //write here potential as function of phi
-    // if (a<1.0001e-14) {
-    //   printf("here: %e, %e, %e, %e, %e, %e, %e\n", a, pba->scf_parameters[0], pba->scf_parameters[1], pba->scf_parameters[2], pba->scf_parameters[3], pba->scf_parameters[4], pba->scf_parameters[5]);//EB
-    // }
     pvecback[pba->index_bg_dV_scf] = dV_scf(pba,phi); // dV_scf(pba,phi); //potential' as function of phi
     pvecback[pba->index_bg_ddV_scf] = ddV_scf(pba,phi); // ddV_scf(pba,phi); //potential'' as function of phi
     pvecback[pba->index_bg_rho_scf] = (phi_prime*phi_prime/(2*a*a) + V_scf(pba,phi))/3.; // energy of the scalar field. The field units are set automatically by setting the initial conditions
     pvecback[pba->index_bg_p_scf] =(phi_prime*phi_prime/(2*a*a) - V_scf(pba,phi))/3.; // pressure of the scalar field
-    // if (a<1.0001e-14) {
-    if (a>0.99999) {
-      printf("here: %e, %e, %e, %e, %e, %e, %e, %e\n", a, pvecback[pba->index_bg_V_scf], pvecback[pba->index_bg_dV_scf], pvecback[pba->index_bg_ddV_scf], pvecback[pba->index_bg_rho_scf], pvecback[pba->index_bg_p_scf], pvecback[pba->index_bg_phi_scf], pvecback[pba->index_bg_phi_prime_scf]);//EB
-    }
     rho_tot += pvecback[pba->index_bg_rho_scf];
     p_tot += pvecback[pba->index_bg_p_scf];
     dp_dloga += 0.0; /** <-- This depends on a_prime_over_a, so we cannot add it now! */
@@ -475,9 +468,6 @@ int background_functions(
 /** - compute scf fraction density. Note the factor of 1/3 in going from V-->rho. */
   if (pba->has_scf == _TRUE_) {
     pvecback[pba->index_bg_rho_crit] = rho_tot-pba->K/a/a;
-    // if (pvecback[pba->index_bg_V_e_scf]/pvecback[pba->index_bg_rho_crit]/3 >= 0.050) {
-    //   printf("%e\n", pvecback[pba->index_bg_V_e_scf]/pvecback[pba->index_bg_rho_crit]/3);
-    // }//EB
     class_test(pvecback[pba->index_bg_V_e_scf]/pvecback[pba->index_bg_rho_crit]/3 >= 0.50,
                pba->error_message,
                "fEDE = %e instead of < 0.5",pvecback[pba->index_bg_V_e_scf]/pvecback[pba->index_bg_rho_crit]/3 );

@@ -3578,26 +3578,10 @@ int input_try_unknown_parameters(double * unknown_parameter,
     if (input_verbose>2)
       printf("Stage 1: background\n");
     ba.background_verbose = 0;
-    // printf("before: %e, %e, %e, %e, %e, %e\n", ba.scf_parameters[0], ba.scf_parameters[1], ba.scf_parameters[2], ba.scf_parameters[3], ba.scf_parameters[4], ba.scf_parameters[5]);//EB
-    // printf("size = %d\n", ba.scf_parameters_size);//EB
-    // printf("idx = %d\n", ba.scf_tuning_index);//EB
-    // printf("before[0] = %e\n", ba.scf_parameters[0]);//EB
-    // printf("before[1] = %e\n", ba.scf_parameters[1]);//EB
-    // printf("before[2] = %e\n", ba.scf_parameters[2]);//EB
-    // printf("before[3] = %e\n", ba.scf_parameters[3]);//EB
-    // printf("before[4] = %e\n", ba.scf_parameters[4]);//EB
-    // printf("before[5] = %e\n", ba.scf_parameters[5]);//EB
     class_call(background_init(&pr,&ba),
                ba.error_message,
                errmsg
                );
-     // printf("after: %e, %e, %e, %e, %e, %e\n", ba.scf_parameters[0], ba.scf_parameters[1], ba.scf_parameters[2], ba.scf_parameters[3], ba.scf_parameters[4], ba.scf_parameters[5]);//EB
-     // printf("after[0] = %e\n", ba.scf_parameters[0]);//EB
-     // printf("after[1] = %e\n", ba.scf_parameters[1]);//EB
-     // printf("after[2] = %e\n", ba.scf_parameters[2]);//EB
-     // printf("after[3] = %e\n", ba.scf_parameters[3]);//EB
-     // printf("after[4] = %e\n", ba.scf_parameters[4]);//EB
-     // printf("after[5] = %e\n", ba.scf_parameters[5]);//EB
   }
 
   if (pfzw->required_computation_stage >= cs_thermodynamics){
